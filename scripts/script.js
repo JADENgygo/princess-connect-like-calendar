@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		template: `
 			<div class="uk-container uk-text-center">
 				<div class="uk-text-lead uk-text-center uk-margin-top">いいねカウンター</div>
-				<div class="uk-margin-top">プリコネRのクラン用</div>
+				<div class="uk-margin-top">プリコネRのクラン用<br>(データはブラウザに保存されます)</div>
 				<select class="uk-select uk-form-small uk-form-width-xsmall uk-margin-top" v-on:change="saveMemberCount($event)">
 					<option v-for="i in 29" v-bind:value="i" v-bind:selected="i === memberCount">{{ i }}</option>
 				</select>
