@@ -2,11 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	const calendar = {
 		created: function() {
 			for (let i = 0; i < 29; ++i) {
-				this.memberNames[i] = this.$set(this.memberNames, i, localStorage.getItem('memberName' + i) ?? '');
+				this.$set(this.memberNames, i, localStorage.getItem('memberName' + i) ?? '');
 			}
 			this.memberCount = parseInt(localStorage.getItem('memberCount') ?? 1);
 			for (let i = 0; i < 29; ++i) {
-				this.likes[i] = this.$set(this.likes, i, parseInt(localStorage.getItem('likes' + i) ?? 0));
+				this.$set(this.likes, i, parseInt(localStorage.getItem('likes' + i) ?? 0));
 			}
 		},
 		data: function() {
@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
 				localStorage.setItem('memberCount', event.target.value);
 			},
 			saveMemberNames: function(event, index) {
-				console.log(event.keyCode);
 				this.$set(this.memberNames, index, event.target.value);
 				localStorage.setItem('memberName' + index, event.target.value);
 			},
@@ -48,6 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
 					this.$set(this.likes, i, 0);
 					localStorage.setItem('likes' + i, 0);
 				}
+				UIkit.notification({
+					message: 'いいねをリセットしました',
+					pos: 'top-center',
+					timeout: 1000
+				});
 			}
 		},
 		template: `
@@ -61,9 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				<div id="modal-example" uk-modal>
 					<div class="uk-modal-dialog uk-modal-body">
 						<div class="uk-margin-bottom">いいねをリセットしますか</div>
-						<div>
+						<div class="uk-text-right">
 							<button class="uk-button uk-button-default uk-button-small uk-modal-close">キャンセル</button>
-							<button class="uk-button uk-button-danger uk-button-small uk-margin-left" v-on:click="resetLikes()">リセット</button>
+							<button class="uk-button uk-button-danger uk-button-small uk-modal-close uk-margin-left" v-on:click="resetLikes()">リセット</button>
 						</div>
 					</div>
 				</div>
