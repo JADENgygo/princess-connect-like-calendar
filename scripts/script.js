@@ -2,11 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	const calendar = {
 		created: function() {
 			for (let i = 0; i < 29; ++i) {
-				this.$set(this.memberNames, i, localStorage.getItem('memberName' + i) ?? '');
+				this.$set(this.memberNames, i, localStorage.getItem('memberName' + i) === null ? '' : localStorage.getItem('memberName' + i));
 			}
-			this.memberCount = parseInt(localStorage.getItem('memberCount') ?? 1);
+			this.memberCount = parseInt(localStorage.getItem('memberCount') === null ? 1 : localStorage.getItem('memberCount'));
 			for (let i = 0; i < 29; ++i) {
-				this.$set(this.likes, i, parseInt(localStorage.getItem('likes' + i) ?? 0));
+				this.$set(this.likes, i, parseInt(localStorage.getItem('likes' + i)  === null ? 0 : localStorage.getItem('likes' + i)));
 			}
 		},
 		data: function() {
@@ -72,14 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
 					</div>
 				</div>
 				<div class="uk-margin-small-top" v-for="i in  29">
-					<span v-if="i <= 9" v-bind:class="{hidden : memberCount < i}">&nbsp;&nbsp;{{ i }}&nbsp;</span>
-					<span v-else v-bind:class="{hidden : memberCount < i}">{{ i }}&nbsp;</span>
+					<span v-if="i <= 9" v-bind:class="{hidden : memberCount < i}">&nbsp;&nbsp;{{ i }}</span>
+					<span v-else v-bind:class="{hidden : memberCount < i}">{{ i }}</span>
 					<input v-bind:id="'memberName' + (i - 1)" v-bind:class="{hidden : memberCount < i}" class="uk-input uk-form-small uk-form-width-small" type="text" v-on:input="saveMemberNames($event, i - 1)" v-on:keydown="moveFocus($event, i - 1)" v-bind:value="memberNames[i - 1]" v-bind:tabindex="i">
 					<button v-bind:class="{hidden : memberCount < i}" class="uk-button uk-button-default uk-button-small" v-on:click="incrementLike(i - 1)">+</button>
 					<button v-bind:class="{hidden : memberCount < i}" class="uk-button uk-button-default uk-button-small" v-on:click="decrementLike(i - 1)">-</button>
 					<span v-bind:class="{hidden : memberCount < i}" id="like" class="uk-badge">{{ likes[i - 1] }}</span>
 				</div>
-				<div class="uk-margin-top uk-margin-bottom"><span class="uk-text-muted">サイト作成者:&nbsp;</span><a class="uk-text-muted" href="https://twitter.com/JADENgygo">@JADENgygo</a></div>
+				<div class="uk-margin-top uk-margin-bottom"><span class="uk-text-muted">サイト作成者: </span><a class="uk-text-muted" href="https://twitter.com/JADENgygo">@JADENgygo</a></div>
 			</div>
 		`
 	};
