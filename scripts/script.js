@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		},
 		template: `
-			<div class="uk-container">
+			<div class="uk-container uk-text-center">
 				<div class="uk-text-lead uk-text-center uk-margin-top">いいねカウンター</div>
 				<div class="uk-margin-top">プリコネRのクランメンバーのいいね管理ツール (データはブラウザに保存されます)</div>
 				<select class="uk-select uk-form-small uk-form-width-xsmall uk-margin-top" v-model="memberCount" v-on:change="saveMemberCount($event)">
