@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				</div>
 				<template v-for="i in 29">
 					<div class="uk-margin-small-top" v-if="i <= memberCount">
-						<span v-if="i <= 9">&nbsp;&nbsp;{{ i }}</span>
+						<span v-if="i <= 9">{{ i }}</span>
 						<span v-else>{{ i }}</span>
 						<input v-bind:id="'memberName' + (i - 1)" class="uk-input uk-form-small uk-form-width-small" type="text" v-on:input="saveMemberNames($event, i - 1)" v-on:keydown="moveFocus($event, i - 1)" v-model="memberNames[i - 1]" v-bind:tabindex="i">
 						<button class="uk-button uk-button-default uk-button-small" v-on:click="incrementLike(i - 1)">+</button>
