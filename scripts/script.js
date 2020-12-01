@@ -26,13 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
 				localStorage.setItem('memberName' + index, event.target.value);
 			},
 			moveFocus: function(event, index) {
-				event.preventDefault();
 				if (event.keyCode === 13) {
 					let i = index;
 					if (index === 28) {
 						i = -1;
 					}
 					document.getElementById('member-name' + (i + 1)).focus();
+					event.preventDefault();
 				}
 			},
 			incrementLike: function(index) {
