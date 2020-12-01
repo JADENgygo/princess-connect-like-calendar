@@ -1,0 +1,40 @@
+{
+  "name": "princess_connect_like_counter",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build:release": "npm run copy && webpack --mode=production",
+    "build:debug": "npm run copy && webpack --mode=development",
+    "watch": "npm run copy && webpack --mode=development --watch",
+    "start": "npm run copy && webpack serve --mode=development",
+    "copy": "rm -r dist & mkdir dist & cp -r public/* dist"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JADENgygo/princess-connect-like-counter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JADENgygo/princess-connect-like-counter/issues"
+  },
+  "homepage": "https://github.com/JADENgygo/princess-connect-like-counter#readme",
+  "dependencies": {
+    "uikit": "^3.5.9",
+    "vue": "^2.6.12"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "babel-loader": "^8.2.1",
+    "css-loader": "^5.0.1",
+    "style-loader": "^2.0.0",
+    "url-loader": "^4.1.1",
+    "vue-loader": "^15.9.5",
+    "vue-template-compiler": "^2.6.12",
+    "webpack": "^5.5.1",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
