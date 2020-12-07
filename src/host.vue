@@ -18,15 +18,15 @@
 				</div>
 			</div>
 			<template v-for="i in 29">
-				<form class="uk-form-stacked uk-margin-small-top uk-margin-bottom" v-if="i <= memberCount">
+				<div class="uk-form-stacked uk-margin-small-top uk-margin-bottom" v-if="i <= memberCount">
 					<label class="uk-form-label" v-bind:for="'member-name' + (i - 1)">{{ 'メンバー' + i }}</label>
 					<div class="uk-form-controls">
 						<input v-bind:id="'member-name' + (i - 1)" class="uk-input uk-form-small uk-form-width-small" type="text" v-on:input="saveMemberNames($event, i - 1)" v-on:keydown="moveFocus($event, i - 1)" v-model="memberNames[i - 1]" v-bind:tabindex="i">
-						<button type="button" class="uk-button uk-button-default uk-button-small" v-on:click="incrementLike(i - 1)">+</button>
-						<button type="button" class="uk-button uk-button-default uk-button-small" v-on:click="decrementLike(i - 1)">-</button>
+						<button class="uk-button uk-button-default uk-button-small" v-on:click="incrementLike(i - 1)">+</button>
+						<button class="uk-button uk-button-default uk-button-small" v-on:click="decrementLike(i - 1)">-</button>
 						<span id="like" class="uk-badge">{{ likes[i - 1] }}</span>
 					</div>
-				</form>
+				</div>
 			</template>
 		</div>
 	</div>
