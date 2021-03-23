@@ -1,14 +1,14 @@
 import UIkit from 'uikit';
 import Vue from 'vue';
 import './uikit.min.css';
-import host from './host';
+import Host from './Host';
 
 new Vue({
 	el: '#app',
 	components: {
-		'host': host
+		Host
 	},
 	template: `
-		<host></host>
+		<Host/>
 	`
 });

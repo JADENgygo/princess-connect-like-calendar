@@ -31,78 +31,72 @@
 		</div>
 	</div>
 </template>
-<script>
+<script lang="ts">
 import UIkit from 'uikit';
-export default {
-	data: function() {
-		return {
-			memberNames: [...Array(29)].map(() => ''),
-			memberCount: 1,
-			likes: [...Array(29)].map(() => 0)
-		}
-	},
-	created: function() {
-		for (let i = 0; i < 29; ++i) {
+import Vue from 'vue';
+import Component from 'vue-class-component';
+
+@Component
+export default class Host extends Vue {
+	memberNames: string[] = [...Array(29)].map(() => '');
+	memberCount: number = 1;
+	likes: number[] = [...Array(29)].map(() => 0);
+
+	created() {
+		for (let i: number = 0; i < 29; ++i) {
 			this.$set(this.memberNames, i, localStorage.getItem('memberName' + i) === null ? '' : localStorage.getItem('memberName' + i));
 		}
-		this.memberCount = parseInt(localStorage.getItem('memberCount') === null ? 1 : localStorage.getItem('memberCount'));
-		for (let i = 0; i < 29; ++i) {
-			this.$set(this.likes, i, parseInt(localStorage.getItem('likes' + i)  === null ? 0 : localStorage.getItem('likes' + i)));
+		const count: string = localStorage.getItem('memberCount') ?? '1';
+		this.memberCount = parseInt(count);
+		for (let i: number = 0; i < 29; ++i) {
+			const like: string = localStorage.getItem('likes' + i) ?? '0';
+			this.$set(this.likes, i, parseInt(like));
 		}
-	},
-	methods: {
-		saveMemberCount: function(event) {
-			this.memberCount = event.target.value;
-			localStorage.setItem('memberCount', event.target.value);
-		},
-		saveMemberNames: function(event, index) {
-			this.$set(this.memberNames, index, event.target.value);
-			localStorage.setItem('memberName' + index, event.target.value);
-		},
-		moveFocus: function(event, index) {
-			if (event.keyCode === 13) {
-				let i = index;
-				if (index === 28) {
-					i = -1;
-				}
-				document.getElementById('member-name' + (i + 1)).focus();
-				event.preventDefault();
+	}
+
+	saveMemberCount(event: any): void {
+		this.memberCount = event.target.value;
+		localStorage.setItem('memberCount', event.target.value);
+	}
+
+	saveMemberNames(event: any, index: number): void {
+		this.$set(this.memberNames, index, event.target.value);
+		localStorage.setItem('memberName' + index, event.target.value);
+	}
+
+	moveFocus(event: any, index: number): void {
+		if (event.keyCode === 13) {
+			let i: number = index;
+			if (index === 28) {
+				i = -1;
 			}
-		},
-		incrementLike: function(index) {
-			this.$set(this.likes, index, this.likes[index] + 1);
-			localStorage.setItem('likes' + index, this.likes[index]);
-		},
-		decrementLike: function(index) {
-			this.$set(this.likes, index, this.likes[index] === 0 ? 0 : this.likes[index] - 1);
-			localStorage.setItem('likes' + index, this.likes[index]);
-		},
-		resetLikes: function() {
-			for (let i = 0; i < 29; ++i) {
-				this.$set(this.likes, i, 0);
-				localStorage.setItem('likes' + i, 0);
-			}
-			UIkit.notification({
-				message: 'いいねをリセットしました',
-				pos: 'top-center',
-				timeout: 1000
-			});
+			document.getElementById('member-name' + (i + 1))?.focus();
+			event.preventDefault();
 		}
+	}
+
+	incrementLike(index: number): void {
+		this.$set(this.likes, index, this.likes[index] + 1);
+		localStorage.setItem('likes' + index, this.likes[index].toString());
+	}
+
+	decrementLike(index: number): void {
+		this.$set(this.likes, index, this.likes[index] === 0 ? 0 : this.likes[index] - 1);
+		localStorage.setItem('likes' + index, this.likes[index].toString());
+	}
+
+	resetLikes(): void {
+		for (let i: number = 0; i < 29; ++i) {
+			this.$set(this.likes, i, 0);
+			localStorage.setItem('likes' + i, '0');
+		}
+		UIkit.notification({
+			message: 'いいねをリセットしました',
+			pos: 'top-center',
+			timeout: 1000
+		});
 	}
 }
 </script>
 <style scoped>
 </style>
-		`
-	};
-
-	new Vue({
-		el: '#app',
-		components: {
-			'calendar': calendar
-		},
-		template: `
-			<calendar></calendar>
-		`
-	});
-});
