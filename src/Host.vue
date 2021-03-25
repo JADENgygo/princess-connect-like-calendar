@@ -70,8 +70,7 @@ export default class Host extends Vue {
 				return;
 			}
 			const uid = result.user.uid;
-			const db = firebase.firestore();
-			db.collection('users').doc(uid).get().then(doc => {
+			this.db.collection('users').doc(uid).get().then(doc => {
 				if (!doc.exists) {
 					const newDoc: {[key: string]: any} = {};
 					newDoc['memberCount'] = 1;
@@ -81,7 +80,7 @@ export default class Host extends Vue {
 					}
 					newDoc['created_at'] = dayjs().format();
 					newDoc['updated_at'] = null;
-					db.collection('users').doc(uid).set(newDoc);
+					this.db.collection('users').doc(uid).set(newDoc);
 				}
 			});
 		}).catch(error => {
