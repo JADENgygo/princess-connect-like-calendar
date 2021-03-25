@@ -23,5 +23,27 @@
 <body>
 	<div id="app"></div>
 	<script src="app.js"></script>
+
+	<!-- The core Firebase JS SDK is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+	<!-- TODO: Add SDKs for Firebase products that you want to use
+		 https://firebase.google.com/docs/web/setup#available-libraries -->
+	<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-analytics.js"></script>
+	<script>
+		// Your web app's Firebase configuration
+		// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+		var firebaseConfig = {
+			apiKey: "AIzaSyCq4XJ_ClTwdxtMUITQ0Xb7Ot7d30c4nL8",
+			authDomain: "princess-connect-like-counter.firebaseapp.com",
+			projectId: "princess-connect-like-counter",
+			storageBucket: "princess-connect-like-counter.appspot.com",
+			messagingSenderId: "108980150403",
+			appId: "1:108980150403:web:3265738e3bef923af33bb6",
+			measurementId: "G-X28TXM2SV3"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+		firebase.analytics();
+	</script>
 </body>
 </html>
