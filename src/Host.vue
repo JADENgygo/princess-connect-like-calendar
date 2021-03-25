@@ -1,12 +1,16 @@
 <template>
 	<div class="uk-container uk-text-center">
-		<div class="uk-margin-small-top uk-text-left"><span class="uk-text-muted">サイト作成者: </span><a class="uk-text-muted" href="https://twitter.com/JADENgygo">@JADENgygo</a></div>
-		<div class="uk-margin-small-top uk-text-right" v-if="state">
-			<button type="button" class="uk-button uk-button-primary uk-button-small" v-on:click="logout()">ログアウト</button>
+		<div uk-grid class="uk-child-width-1-2">
+			<div class="uk-margin-small-top uk-text-left"><span class="uk-text-muted">サイト作成者: </span><a class="uk-link-muted" href="https://twitter.com/JADENgygo">@JADENgygo</a></div>
+			<div class="uk-margin-small-top uk-text-right" v-if="state === 'login'"><a class="uk-link-muted" v-on:click="logout()">ログアウト</a></div>
 		</div>
 		<div class="uk-text-lead uk-margin-top">いいねカウンター</div>
 		<div class="uk-margin-top">プリコネRのクランメンバーのいいね管理ツール</div>
-		<div v-if="state">
+		<div class="uk-margin-top" v-if="state === 'load'">
+			<div uk-spinner></div>
+			<div class="uk-margin-small-top">ロード中</div>
+		</div>
+		<div v-if="state === 'login'">
 			<div class="content">
 				<select class="uk-select uk-form-small uk-form-width-xsmall uk-margin-top" v-model="memberCount" v-on:change="saveMemberCount($event)">
 					<option v-for="i in 29">{{ i }}</option>
@@ -34,9 +38,10 @@
 				</template>
 			</div>
 		</div>
-		<div v-else>
+		<div v-if="state === 'logout'">
 			<div class="uk-text-small uk-margin-top">ログイン</div>
 			<input class="uk-margin-small-top" type="image" v-on:click="login()" v-bind:src="loginIconPath" width="40" height="40">
+			<div class="uk-margin-top">{{ errorMessage }}</div>
 		</div>
 	</div>
 </template>
@@ -49,29 +54,60 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
-const Props = Vue.extend({
-	props: {
-		preMemberCount: Number,
-		preMemberNames: Array,
-		preLikes: Array,
-		preState: Boolean,
-	}
-});
-
 @Component
-export default class Host extends Props {
-	memberCount: number = this.preMemberCount;
-	memberNames: string[] = [];
-	likes: number[] = [];
-	state: boolean = this.preState;
+export default class Host extends Vue {
+	memberCount: number = 1;
+	memberNames: string[] = [...Array(29)].map(() => '');
+	likes: number[] = [...Array(29)].map(() => 0);
+	state: 'login' | 'logout' | 'load' = 'load';
 	db = firebase.firestore();
 	loginIconPath: string = './twitter_icon.svg';
+	errorMessage: string = '';
 
 	created(): void {
-		for (let i: number = 0; i < 29; ++i) {
-			this.$set(this.memberNames, i, this.preMemberNames[i]);
-			this.$set(this.likes, i, this.preLikes[i]);
-		}
+		firebase.auth().getRedirectResult().then((result: any) => {
+			if (!result.user) {
+				return;
+			}
+			const uid = result.user.uid;
+			const db = firebase.firestore();
+			db.collection('users').doc(uid).get().then(doc => {
+				if (!doc.exists) {
+					const newDoc: {[key: string]: any} = {};
+					newDoc['memberCount'] = 1;
+					for (let i = 0; i < 30; i++) {
+						newDoc['like' + i] = 0;
+						newDoc['memberName' + i] = '';
+					}
+					newDoc['created_at'] = dayjs().format();
+					newDoc['updated_at'] = null;
+					db.collection('users').doc(uid).set(newDoc);
+				}
+			});
+		}).catch(error => {
+			this.errorMessage = 'ログインに失敗しました。再度ログインを行ってください。';
+			this.state = 'logout';
+			console.log('redirect result error');
+			console.log(error);
+		});
+
+		firebase.auth().onAuthStateChanged(async (user: any) => {
+			if (user) {
+				const doc = await firebase.firestore().collection('users').doc(user.uid).get();
+				if (doc.exists) {
+					const d: any = doc.data();
+					this.memberCount = d.memberCount;
+					for (let i: number = 0; i < 29; ++i) {
+						this.$set(this.memberNames, i, d['memberName' + i]);
+						this.$set(this.likes, i, d['like' + i]);
+					}
+				}
+				this.state = 'login';
+			}
+			else {
+				this.state = 'logout';
+			}
+		});
 	}
 
 	login(): void {
@@ -87,7 +123,7 @@ export default class Host extends Props {
 
 	logout(): void {
 		firebase.auth().signOut().then(() => {
-			this.state = false;
+			this.state = 'logout';
 		}).catch((error: any) => {
 			console.log('logout error');
 			console.log(error);
