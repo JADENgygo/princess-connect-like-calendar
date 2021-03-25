@@ -4,12 +4,8 @@
 		<div class="uk-margin-small-top uk-text-right" v-if="state">
 			<button type="button" class="uk-button uk-button-primary uk-button-small" v-on:click="logout()">ログアウト</button>
 		</div>
-		<div class="uk-margin-small-top uk-text-right" v-else>
-			<button type="button" class="uk-button uk-button-primary uk-button-small" v-on:click="login()">ログイン</button>
-		</div>
 		<div class="uk-text-lead uk-margin-top">いいねカウンター</div>
 		<div class="uk-margin-top">プリコネRのクランメンバーのいいね管理ツール</div>
-		<div class="uk-margin-top" v-if="disconnected">ログアウトしました</div>
 		<div v-if="state">
 			<div class="content">
 				<select class="uk-select uk-form-small uk-form-width-xsmall uk-margin-top" v-model="memberCount" v-on:change="saveMemberCount($event)">
@@ -38,6 +34,10 @@
 				</template>
 			</div>
 		</div>
+		<div v-else>
+			<div class="uk-text-small uk-margin-top">ログイン</div>
+			<input class="uk-margin-small-top" type="image" v-on:click="login()" v-bind:src="loginIconPath" width="40" height="40">
+		</div>
 	</div>
 </template>
 <script lang="ts">
@@ -65,7 +65,7 @@ export default class Host extends Props {
 	likes: number[] = [];
 	state: boolean = this.preState;
 	db = firebase.firestore();
-	disconnected: boolean = false;
+	loginIconPath: string = './twitter_icon.svg';
 
 	created(): void {
 		for (let i: number = 0; i < 29; ++i) {
@@ -88,7 +88,6 @@ export default class Host extends Props {
 	logout(): void {
 		firebase.auth().signOut().then(() => {
 			this.state = false;
-			this.disconnected = true;
 		}).catch((error: any) => {
 			console.log('logout error');
 			console.log(error);
