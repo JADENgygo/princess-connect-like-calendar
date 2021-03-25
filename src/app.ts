@@ -5,7 +5,6 @@ import Host from './Host';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import dayjs from 'dayjs';
 
 const firebaseConfig = {
 	apiKey: "AIzaSyCq4XJ_ClTwdxtMUITQ0Xb7Ot7d30c4nL8",
